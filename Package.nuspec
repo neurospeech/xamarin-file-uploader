@@ -33,6 +33,6 @@
   </metadata>
   <files>
     <file src="XamarinFileUploader.iOS\bin\Debug\XamarinFileUploader.iOS.*" target="lib\Xamarin.iOS10" />
-    <file src="XamarinFileUploader.Droid\bin\Debug\XamarinFileUploader.iOS.*" target="lib\MonoAndroid10" />
+    <file src="XamarinFileUploader.Droid\bin\Debug\XamarinFileUploader.Droid.*" target="lib\MonoAndroid10" />
   </files>
 </package>

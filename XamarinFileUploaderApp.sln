@@ -9,6 +9,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XamarinFileUploader.Droid",
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "XamarinFileUploader", "XamarinFileUploader\XamarinFileUploader.shproj", "{2F7F776D-DFD2-46CB-9F25-60546D33FEAB}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7B12B139-7C26-43C3-B771-AFF86C9F98B6}"
+	ProjectSection(SolutionItems) = preProject
+		Package.nuspec = Package.nuspec
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		XamarinFileUploader\XamarinFileUploader.projitems*{2f7f776d-dfd2-46cb-9f25-60546d33feab}*SharedItemsImports = 13
