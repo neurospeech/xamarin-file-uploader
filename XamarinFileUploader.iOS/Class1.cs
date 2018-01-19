@@ -38,6 +38,11 @@ namespace XamarinFileUploader
             NSMutableDictionary headers = new NSMutableDictionary();
             headers.SetValueForKey(new NSString(r.ContentType), (NSString)"Content-Type");
 
+            if (r.Headers != null) {
+                foreach (var h in r.Headers) {
+                    headers.SetValueForKey(new NSString(h.Key), new NSString(h.Value));
+                }
+            }
             request.Headers = headers;
 
 

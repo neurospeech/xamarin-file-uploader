@@ -30,7 +30,12 @@ namespace XamarinFileUploader
                 ResponseFilePath = System.IO.Path.GetTempFileName()
             };
 
-            
+            List<Header> headerlist = new List<Header>();
+            foreach (var header in content.Headers) {
+                if (string.Equals(header.Key, "content-type", StringComparison.OrdinalIgnoreCase))
+                    continue;
+                headerlist.Add(new Header(header.Key, string.Join(" ", header.Value)));
+            }
 
             using (var fs = System.IO.File.OpenWrite(request.FilePath)) {
                 await content.CopyToAsync(fs);
@@ -162,6 +167,8 @@ namespace XamarinFileUploader
         /// </summary>
         public string Method { get; set; }
 
+        public Header[] Headers { get; set; }
+
 
         /// <summary>
         /// 
@@ -205,5 +212,22 @@ namespace XamarinFileUploader
         /// 
         /// </summary>
         public string ResponseFilePath { get; set; }
+    }
+
+    public class Header {
+
+        public Header()
+        {
+
+        }
+
+        public Header(string key, string v)
+        {
+            this.Key = key;
+            this.Value = v;
+        }
+
+        public string Key { get; set; }
+        public string Value { get; set; }
     }
 }

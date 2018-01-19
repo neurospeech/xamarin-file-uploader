@@ -67,7 +67,7 @@ namespace XamarinFileUploader
 
             while (true) {
                 
-                var pending = XamarinFileUploader.FileUploaderService.Instance.Requests.FirstOrDefault(x => x.ResponseCode == 0);
+                var pending = FileUploaderService.Instance.Requests.FirstOrDefault(x => x.ResponseCode == 0);
                 if (pending == null)
                     break;
 
@@ -85,9 +85,19 @@ namespace XamarinFileUploader
                                 XamarinFileUploader.FileUploaderService.Instance.ReportProgress(pending);
                             });
 
+                        var headers = new Headers.Builder();
+                        if (pending.Headers != null)
+                        {
+                            foreach (var h in pending.Headers)
+                            {
+                                headers.Add(h.Key, h.Value);
+                            }
+                        }
+
                         var request = new Square.OkHttp3.Request.Builder()
                             .Url(pending.Url)
                             .Post(body)
+                            .Headers(headers.Build())
                             .Build();
 
                         var response = client.NewCall(request).Execute();
