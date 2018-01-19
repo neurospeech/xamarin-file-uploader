@@ -10,12 +10,30 @@ using XamarinFileUploader;
 
 namespace XamarinFileUploader
 {
+
+    public interface IFileUploadReceiver {
+
+
+        Task<bool> CompletedAsync(FileUploadRequest request);
+
+        Task<bool> FailedAsync(FileUploadRequest request);
+
+        void OnProgress(FileUploadRequest request);
+
+        void FatalError(Exception ex);
+
+    }
+
     public partial class FileUploaderService
     {
+
+        public IFileUploadReceiver Receiver { get; set; }
+
 
         public FileUploaderService()
         {
 
+            Receiver = Xamarin.Forms.DependencyService.Get<IFileUploadReceiver>();
 
             Xamarin.Forms.Device.BeginInvokeOnMainThread(async () => {
                 try {
@@ -127,17 +145,10 @@ namespace XamarinFileUploader
             }
         }
 
-        public event EventHandler<FileUploadRequestArgs> Progress;
-
-        public event FileStatusUpdate Success;
-
-        public event FileStatusUpdate Failed;
-
-        public event EventHandler<ExceptionArgs> FatalError;
 
         internal void ReportProgress(FileUploadRequest r)
         {
-            Progress?.Invoke(this, new FileUploadRequestArgs(r));
+            Receiver.OnProgress(r);
             SaveState();
         }
 
@@ -152,22 +163,16 @@ namespace XamarinFileUploader
 
                     if (r.ResponseCode == 200)
                     {
-                        if (Success != null)
+                        if (await Receiver.CompletedAsync(r))
                         {
-                            if (await Success(this, r))
-                            {
-                                r.Processed = true;
-                            }
+                            r.Processed = true;
                         }
                     }
                     else
                     {
-                        if (Failed != null)
+                        if (await Receiver.FailedAsync(r))
                         {
-                            if (await Failed(this, r))
-                            {
-                                r.Processed = true;
-                            }
+                            r.Processed = true;
                         }
                     }
 
@@ -189,7 +194,7 @@ namespace XamarinFileUploader
         }
 
         internal void ReportFatalError(Exception ex) {
-            FatalError?.Invoke(this, new ExceptionArgs(ex));
+            Receiver.FatalError(ex);
         }
         
 
