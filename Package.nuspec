@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
+  <metadata>
+    <id>Xamarin.FileUploader</id>
+    <version>$version$</version>
+    <title>iOS and Droid file uploader for Xamarin</title>
+    <authors>Akash Kava</authors>
+    <owners>Akash Kava</owners>
+    <licenseUrl>https://github.com/neurospeech/ui-atoms-xamarin-forms/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/neurospeech/xamarin-file-uploader</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>
+      UI Atoms for Xamarin Forms, includes, AtomToggleButtonBar, AtomGridView
+    </description>
+    <summary>
+      UI Atoms for Xamarin
+    </summary>
+    <releaseNotes>
+    </releaseNotes>
+    <copyright>NeuroSpeech Technologies Pvt Ltd 2016</copyright>
+    <language>en-US</language>
+    <tags>xamarin,gridview, grid, view, togglebuttonbar, toggle, button, bar</tags>
+    <dependencies>
+        <group targetFramework="monoandroid10">
+          <dependency id="Newtonsoft.Json" version="9.0.1"/>
+          <dependency id="Xamarin.Forms" version="2.3.4.231" />
+          <dependency id="Rg.Plugins.Popup" version="1.0.4"/>          
+        </group>
+      <group targetFramework="xamarinios10">
+        <dependency id="Newtonsoft.Json" version="9.0.1"/>
+        <dependency id="Xamarin.Forms" version="2.3.4.231" />
+        <dependency id="Rg.Plugins.Popup" version="1.0.4"/>        
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="..\NeuroSpeech.UIAtoms.iOS\bin\Debug\NeuroSpeech.UIAtoms.*" target="lib\Xamarin.iOS10" />
+    <file src="..\NeuroSpeech.UIAtoms.Droid\bin\Debug\NeuroSpeech.UIAtoms.*" target="lib\MonoAndroid10" />
+  </files>
+</package>
