@@ -12,6 +12,8 @@ namespace XamarinFileUploaderApp
 		public MainPage()
 		{
 			InitializeComponent();
+
+            this.BindingContext = new MainPageViewModel();
 		}
 	}
 }

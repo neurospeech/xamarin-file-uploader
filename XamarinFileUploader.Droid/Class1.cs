@@ -15,6 +15,12 @@ namespace XamarinFileUploader
 {
     public partial class FileUploaderService
     {
+
+        private void OnStarted() {
+            Intent intent = new Intent(Context, typeof(BackgroundUploadService));
+            Context.StartService(intent);
+        }
+
         protected virtual string ReadPreferences()
         {
             return Context
@@ -64,6 +70,7 @@ namespace XamarinFileUploader
                     return;
                 isRunning = true;
             }
+
 
             while (true) {
                 
@@ -123,6 +130,17 @@ namespace XamarinFileUploader
                 } catch (Exception ex) {
                     FileUploaderService.Instance.ReportFatalError(ex);
                 }
+
+
+
+                Java.Lang.Thread.Sleep(1000);
+
+                // first fire all unprocessed events...
+                foreach (var r in FileUploaderService.Instance.Requests.Where(x => x.ResponseCode != 0 && x.Processed == false))
+                {
+                    FileUploaderService.Instance.ReportStatus(r);
+                }
+
             }
 
 
@@ -137,7 +155,7 @@ namespace XamarinFileUploader
     public class CountingFileRequestBody : Square.OkHttp3.RequestBody
     {
 
-        private static int SEGMENT_SIZE = 2048; // okio.Segment.SIZE
+        private static int SEGMENT_SIZE = 5120; // okio.Segment.SIZE
 
         private File file;
         private Action<int,int> progress;
@@ -167,12 +185,13 @@ namespace XamarinFileUploader
             {
                 long total = 0;
                 long read;
+                long totaltoRead = file.Length();
 
                 while ((read = source.Read(sink.Buffer, SEGMENT_SIZE)) != -1)
                 {
                     total += read;
                     sink.Flush();
-                    this.progress?.Invoke((int)read, (int)total);
+                    this.progress?.Invoke((int)total, (int)totaltoRead);
 
                 }
             }

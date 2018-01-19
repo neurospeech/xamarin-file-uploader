@@ -28,6 +28,14 @@
 	<string>com.yourcompany.XamarinFileUploaderApp</string>
 	<key>CFBundleVersion</key>
 	<string>1.0</string>
+	<key>NSCameraUsageDescription</key>
+<string>This app needs access to the camera to take photos.</string>
+<key>NSPhotoLibraryUsageDescription</key>
+<string>This app needs access to photos.</string>
+<key>NSMicrophoneUsageDescription</key>
+<string>This app needs access to microphone.</string>
+<key>NSPhotoLibraryAddUsageDescription</key>
+<string>This app needs access to the photo gallery.</string>
 	<key>CFBundleIconFiles</key>
 	<array>
 		<string>Icon-60@2x</string>

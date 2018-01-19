@@ -4,11 +4,47 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using XamarinFileUploader;
+
+[assembly: Xamarin.Forms.Dependency(typeof(FileUploaderService))]
 
 namespace XamarinFileUploader
 {
     public partial class FileUploaderService
     {
+
+        public FileUploaderService()
+        {
+
+
+            Xamarin.Forms.Device.BeginInvokeOnMainThread(async () => {
+                try {
+
+                    await Task.Delay(1000);
+                    lock (this)
+                    {
+                        string existing = ReadPreferences();
+
+                        List<FileUploadRequest> requests = Requests;
+
+                        requests.Clear();
+
+                        if (!string.IsNullOrWhiteSpace(existing))
+                        {
+                            requests.AddRange(JsonConvert.DeserializeObject<List<FileUploadRequest>>(existing));
+                        }
+                    }
+
+                    OnStarted();
+
+
+                }
+                catch (Exception ex) {
+                    System.Diagnostics.Debug.Fail(ex.Message, ex.ToString());
+                }
+            });
+            
+        }
 
         private static FileUploaderService _Instance = null;
         public static FileUploaderService Instance =>
@@ -93,9 +129,9 @@ namespace XamarinFileUploader
 
         public event EventHandler<FileUploadRequestArgs> Progress;
 
-        public event EventHandler<FileUploadRequestArgs> Success;
+        public event FileStatusUpdate Success;
 
-        public event EventHandler<FileUploadRequestArgs> Failed;
+        public event FileStatusUpdate Failed;
 
         public event EventHandler<ExceptionArgs> FatalError;
 
@@ -105,18 +141,51 @@ namespace XamarinFileUploader
             SaveState();
         }
 
-        internal void ReportStatus(FileUploadRequest r) {
-            if (r.ResponseCode == 200)
-            {
-                Success?.Invoke(this, new FileUploadRequestArgs(r));
-            }
-            else {
-                Failed?.Invoke(this, new FileUploadRequestArgs(r));
-            }
+        internal Task ReportStatus(FileUploadRequest r) {
 
-            // delete file...
-            Requests.Remove(r);
-            SaveState();
+
+            return Task.Run(async () =>
+            {
+
+                try
+                {
+
+                    if (r.ResponseCode == 200)
+                    {
+                        if (Success != null)
+                        {
+                            if (await Success(this, r))
+                            {
+                                r.Processed = true;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (Failed != null)
+                        {
+                            if (await Failed(this, r))
+                            {
+                                r.Processed = true;
+                            }
+                        }
+                    }
+
+                    if (r.Processed)
+                    {
+                        // delete file...
+                        Requests.Remove(r);
+                        SaveState();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ReportFatalError(ex);
+                }
+
+            });
+
+          
         }
 
         internal void ReportFatalError(Exception ex) {
@@ -129,6 +198,8 @@ namespace XamarinFileUploader
         //    throw new NotImplementedException();
         //}
     }
+
+    public delegate Task<bool> FileStatusUpdate(object sender, FileUploadRequest request);
 
     public class ExceptionArgs : EventArgs
     {
@@ -212,6 +283,12 @@ namespace XamarinFileUploader
         /// 
         /// </summary>
         public string ResponseFilePath { get; set; }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool Processed { get; set; }
     }
 
     public class Header {

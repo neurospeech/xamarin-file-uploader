@@ -4,8 +4,17 @@
              xmlns:local="clr-namespace:XamarinFileUploaderApp"
              x:Class="XamarinFileUploaderApp.MainPage">
 
-	<Label Text="Welcome to Xamarin.Forms!" 
-           VerticalOptions="Center" 
-           HorizontalOptions="Center" />
+    <StackLayout Orientation="Vertical">
 
+	    <Label Text="{Binding Message}" 
+               VerticalOptions="Center" 
+               HorizontalOptions="Center" />
+
+        <Label Text="{Binding Progress}" 
+               VerticalOptions="Center" 
+               HorizontalOptions="Center" />
+    
+        <Button Command="{Binding UploadCommand}">Pick</Button>
+
+    </StackLayout>
 </ContentPage>
