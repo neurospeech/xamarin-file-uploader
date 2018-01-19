@@ -5,7 +5,7 @@
     <Platform Condition=" '$(Platform)' == '' ">iPhoneSimulator</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{6BE00880-5085-48A7-A647-710628BC29E9}</ProjectGuid>
+    <ProjectGuid>{1FFE38D9-7A2E-4077-87B0-740090B4D7C2}</ProjectGuid>
     <ProjectTypeGuids>{FEACFBD2-3405-455C-9665-78FE426C6842};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Exe</OutputType>
     <RootNamespace>XamarinFileUploaderApp.iOS</RootNamespace>
@@ -119,13 +119,19 @@
     <Reference Include="Xamarin.iOS" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="System.Net.Http">
+      <Version>4.3.3</Version>
+    </PackageReference>
     <PackageReference Include="Xamarin.Forms" Version="2.5.0.122203" />
   </ItemGroup>
-  <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <ItemGroup>
-    <ProjectReference Include="..\XamarinFileUploaderApp\XamarinFileUploaderApp.csproj">
-      <Project>{F41B6D00-3F2E-4DCA-AA84-D0767B4B781F}</Project>
-      <Name>XamarinFileUploaderApp</Name>
+    <ProjectReference Include="..\..\XamarinFileUploader.iOS\XamarinFileUploader.iOS.csproj">
+      <Project>{704809f7-b021-461f-acd5-87336f1fcbd1}</Project>
+      <Name>XamarinFileUploader.iOS</Name>
+      <IsAppExtension>false</IsAppExtension>
+      <IsWatchApp>false</IsWatchApp>
     </ProjectReference>
   </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
+  <Import Project="..\XamarinFileUploaderApp\XamarinFileUploaderApp.projitems" Label="Shared" />
 </Project>
