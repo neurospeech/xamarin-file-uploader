@@ -21,13 +21,13 @@
     <language>en-US</language>
     <tags>stateless, file, uploader</tags>
     <dependencies>
-        <group targetFramework="monoandroid71">
+        <group targetFramework="monoandroid10">
           <dependency id="Newtonsoft.Json" version="9.0.1"/>
-          <dependency id="Xamarin.Forms" version="2.5.0.122203" />
+          <dependency id="Xamarin.Forms" version="2.3.4.231" />
         </group>
       <group targetFramework="xamarinios10">
         <dependency id="Newtonsoft.Json" version="9.0.1"/>
-        <dependency id="Xamarin.Forms" version="2.5.0.122203" />
+        <dependency id="Xamarin.Forms" version="2.3.4.231" />
       </group>
     </dependencies>
   </metadata>
