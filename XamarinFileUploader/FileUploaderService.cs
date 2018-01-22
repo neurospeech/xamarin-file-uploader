@@ -78,7 +78,6 @@ namespace XamarinFileUploader
         public async Task StartUpload(string tag, string url, string method, HttpContent content) {
 
             FileUploadRequest request = new FileUploadRequest() {
-                Tag = tag,
                 Identifier = tag,
                 ContentType = content.Headers.ContentType.ToString(),
                 FilePath = System.IO.Path.GetTempFileName(),
@@ -111,7 +110,7 @@ namespace XamarinFileUploader
             lock (this)
             {
 
-                request.Identifier = Guid.NewGuid().ToString();
+                // request.Identifier = Guid.NewGuid().ToString();
 
                 string existing = ReadPreferences();
 
@@ -235,11 +234,6 @@ namespace XamarinFileUploader
         /// </summary>
         public string Identifier { get; set; }
 
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public string Tag { get; set; }
 
         /// <summary>
         /// 
