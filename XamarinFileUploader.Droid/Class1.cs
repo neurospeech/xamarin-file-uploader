@@ -132,15 +132,6 @@ namespace XamarinFileUploader
                 }
 
 
-
-                Java.Lang.Thread.Sleep(1000);
-
-                // first fire all unprocessed events...
-                foreach (var r in FileUploaderService.Instance.Requests.Where(x => x.ResponseCode != 0 && x.Processed == false))
-                {
-                    FileUploaderService.Instance.ReportStatus(r);
-                }
-
             }
 
 
@@ -192,6 +183,14 @@ namespace XamarinFileUploader
                 }
 
 
+            }
+
+
+            // first fire all unprocessed events...
+            foreach (var r in FileUploaderService.Instance.Requests.Where(x => x.ResponseCode != 0 && x.Processed == false))
+            {
+                await FileUploaderService.Instance
+                    .ReportStatus(r);
             }
 
         }
