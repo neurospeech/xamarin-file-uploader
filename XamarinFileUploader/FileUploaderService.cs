@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -74,6 +75,16 @@ namespace XamarinFileUploader
         public List<FileUploadRequest> Requests { get; }
             = new List<FileUploadRequest>();
 
+
+        public async Task ReportPendingStatus() {
+            var pending = Requests
+                .Where(x => x.ResponseCode != 0 && x.Processed == false)
+                .ToList();
+            foreach (var r in pending)
+            {
+                await ReportStatus(r);
+            }
+        }
 
         public async Task StartUpload(string tag, string url, string method, HttpContent content) {
 

@@ -21,10 +21,7 @@ namespace XamarinFileUploader
             System.Threading.Tasks.Task.Run(async () =>
             {
                 await System.Threading.Tasks.Task.Delay(1000);
-                foreach (var r in Requests.Where(x => x.ResponseCode != 0 && x.Processed == false))
-                {
-                    await ReportStatus(r);
-                }
+                await FileUploaderService.Instance.ReportPendingStatus();
             });
         }
 
@@ -122,9 +119,8 @@ namespace XamarinFileUploader
                 r.ResponseCode = 200;
             }
 
-            System.Threading.Tasks.Task.Run(async () => { 
-                await FileUploaderService.Instance.ReportStatus(r);
-
+            System.Threading.Tasks.Task.Run(async () => {
+                await FileUploaderService.Instance.ReportPendingStatus();
                 CompletionHandler?.Invoke();
             });
         }

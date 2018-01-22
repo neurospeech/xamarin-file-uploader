@@ -73,7 +73,10 @@ namespace XamarinFileUploader
                 
                 var pending = FileUploaderService.Instance.Requests.FirstOrDefault(x => x.ResponseCode == 0);
                 if (pending == null)
+                {
+                    FileUploaderService.Instance.ReportPendingStatus().Wait();
                     break;
+                }
 
                 try {
 
@@ -185,13 +188,7 @@ namespace XamarinFileUploader
 
             }
 
-
-            // first fire all unprocessed events...
-            foreach (var r in FileUploaderService.Instance.Requests.Where(x => x.ResponseCode != 0 && x.Processed == false))
-            {
-                await FileUploaderService.Instance
-                    .ReportStatus(r);
-            }
+            await FileUploaderService.Instance.ReportPendingStatus();
 
         }
 
