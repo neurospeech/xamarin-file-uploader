@@ -174,6 +174,13 @@ namespace XamarinFileUploader
                 try
                 {
 
+                    lock (r)
+                    {
+                        if (r.IsNotifying)
+                            return;
+                        r.IsNotifying = true;
+                    }
+
                     if (r.ResponseCode == 200)
                     {
                         if (await Receiver.CompletedAsync(r))
@@ -199,6 +206,13 @@ namespace XamarinFileUploader
                 catch (Exception ex)
                 {
                     ReportFatalError(ex);
+                }
+                finally
+                {
+                    lock (r)
+                    {
+                        r.IsNotifying = false;
+                    }
                 }
 
             });
@@ -239,6 +253,8 @@ namespace XamarinFileUploader
     }
 
     public class FileUploadRequest {
+
+        internal bool IsNotifying = false;
 
         /// <summary>
         /// 
