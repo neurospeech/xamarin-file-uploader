@@ -23,7 +23,7 @@ namespace XamarinFileUploader
                 await System.Threading.Tasks.Task.Delay(1000);
                 foreach (var r in Requests.Where(x => x.ResponseCode != 0 && x.Processed == false))
                 {
-                    ReportStatus(r);
+                    await ReportStatus(r);
                 }
             });
         }

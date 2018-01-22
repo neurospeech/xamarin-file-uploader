@@ -22,6 +22,8 @@ namespace XamarinFileUploader
 
         void FatalError(Exception ex);
 
+        HttpClient GetHttpClient();
+
     }
 
     public partial class FileUploaderService
