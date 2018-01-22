@@ -80,52 +80,52 @@ namespace XamarinFileUploader
 
                 try {
 
-                    using (Square.OkHttp3.OkHttpClient client = new Square.OkHttp3.OkHttpClient()) {
+                    //using (Square.OkHttp3.OkHttpClient client = new Square.OkHttp3.OkHttpClient()) {
 
                         
 
-                        var contentType = Square.OkHttp3.MediaType.Parse(pending.ContentType);
-                        var body = // Square.OkHttp3.RequestBody.Create(contentType, new Java.IO.File(pending.FilePath));
-                            new CountingFileRequestBody(new Java.IO.File(pending.FilePath), pending.ContentType, (s, t) => {
-                                pending.TotalSent = s;
-                                pending.TotalBytes = t;
-                                XamarinFileUploader.FileUploaderService.Instance.ReportProgress(pending);
-                            });
+                    //    var contentType = Square.OkHttp3.MediaType.Parse(pending.ContentType);
+                    //    var body = // Square.OkHttp3.RequestBody.Create(contentType, new Java.IO.File(pending.FilePath));
+                    //        new CountingFileRequestBody(new Java.IO.File(pending.FilePath), pending.ContentType, (s, t) => {
+                    //            pending.TotalSent = s;
+                    //            pending.TotalBytes = t;
+                    //            XamarinFileUploader.FileUploaderService.Instance.ReportProgress(pending);
+                    //        });
 
-                        var headers = new Headers.Builder();
-                        if (pending.Headers != null)
-                        {
-                            foreach (var h in pending.Headers)
-                            {
-                                headers.Add(h.Key, h.Value);
-                            }
-                        }
+                    //    var headers = new Headers.Builder();
+                    //    if (pending.Headers != null)
+                    //    {
+                    //        foreach (var h in pending.Headers)
+                    //        {
+                    //            headers.Add(h.Key, h.Value);
+                    //        }
+                    //    }
 
-                        var request = new Square.OkHttp3.Request.Builder()
-                            .Url(pending.Url)
-                            .Post(body)
-                            .Headers(headers.Build())
-                            .Build();
+                    //    var request = new Square.OkHttp3.Request.Builder()
+                    //        .Url(pending.Url)
+                    //        .Post(body)
+                    //        .Headers(headers.Build())
+                    //        .Build();
 
-                        var response = client.NewCall(request).Execute();
+                    //    var response = client.NewCall(request).Execute();
 
-                        using (var fs = System.IO.File.OpenWrite(pending.ResponseFilePath))
-                        {
-                            var b = response.Body().Bytes();
-                            fs.Write(b, 0, b.Length);
-                        }
+                    //    using (var fs = System.IO.File.OpenWrite(pending.ResponseFilePath))
+                    //    {
+                    //        var b = response.Body().Bytes();
+                    //        fs.Write(b, 0, b.Length);
+                    //    }
 
-                        if (response.IsSuccessful)
-                        {
-                            pending.ResponseCode = 200;
-                        }
-                        else {
-                            pending.ResponseCode = 500;
-                        }
+                    //    if (response.IsSuccessful)
+                    //    {
+                    //        pending.ResponseCode = 200;
+                    //    }
+                    //    else {
+                    //        pending.ResponseCode = 500;
+                    //    }
 
-                        XamarinFileUploader.FileUploaderService.Instance.ReportStatus(pending);
+                    //    XamarinFileUploader.FileUploaderService.Instance.ReportStatus(pending);
 
-                    }
+                    //}
 
                 } catch (Exception ex) {
                     FileUploaderService.Instance.ReportFatalError(ex);
@@ -152,51 +152,51 @@ namespace XamarinFileUploader
 
     }
 
-    public class CountingFileRequestBody : Square.OkHttp3.RequestBody
-    {
+    //public class CountingFileRequestBody : Square.OkHttp3.RequestBody
+    //{
 
-        private static int SEGMENT_SIZE = 5120; // okio.Segment.SIZE
+    //    private static int SEGMENT_SIZE = 5120; // okio.Segment.SIZE
 
-        private File file;
-        private Action<int,int> progress;
-        private String _contentType;
+    //    private File file;
+    //    private Action<int,int> progress;
+    //    private String _contentType;
 
-        public CountingFileRequestBody(File file, String contentType, Action<int,int> progress)
-        {
-            this.file = file;
-            this._contentType = contentType;
-            this.progress = progress;
-        }
+    //    public CountingFileRequestBody(File file, String contentType, Action<int,int> progress)
+    //    {
+    //        this.file = file;
+    //        this._contentType = contentType;
+    //        this.progress = progress;
+    //    }
 
-        public long contentLength()
-        {
-            return file.Length();
-        }
+    //    public long contentLength()
+    //    {
+    //        return file.Length();
+    //    }
 
-        public override MediaType ContentType()
-        {
-            return MediaType.Parse(_contentType);
-        }
+    //    public override MediaType ContentType()
+    //    {
+    //        return MediaType.Parse(_contentType);
+    //    }
 
-        public override void WriteTo(IBufferedSink sink) 
-        {
+    //    public override void WriteTo(IBufferedSink sink) 
+    //    {
             
-            using (var source = Square.OkIO.OkIO.Source(file))
-            {
-                long total = 0;
-                long read;
-                long totaltoRead = file.Length();
+    //        using (var source = Square.OkIO.OkIO.Source(file))
+    //        {
+    //            long total = 0;
+    //            long read;
+    //            long totaltoRead = file.Length();
 
-                while ((read = source.Read(sink.Buffer, SEGMENT_SIZE)) != -1)
-                {
-                    total += read;
-                    sink.Flush();
-                    this.progress?.Invoke((int)total, (int)totaltoRead);
+    //            while ((read = source.Read(sink.Buffer, SEGMENT_SIZE)) != -1)
+    //            {
+    //                total += read;
+    //                sink.Flush();
+    //                this.progress?.Invoke((int)total, (int)totaltoRead);
 
-                }
-            }
-        }
+    //            }
+    //        }
+    //    }
 
 
-    }
+    //}
 }
