@@ -79,6 +79,7 @@ namespace XamarinFileUploader
 
             FileUploadRequest request = new FileUploadRequest() {
                 Tag = tag,
+                Identifier = tag,
                 ContentType = content.Headers.ContentType.ToString(),
                 FilePath = System.IO.Path.GetTempFileName(),
                 Method = method,
