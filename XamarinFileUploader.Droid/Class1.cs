@@ -1,11 +1,6 @@
 ﻿using Android.App;
 using Android.Content;
-using Java.IO;
-using Newtonsoft.Json;
-using Square.OkHttp3;
-using Square.OkIO;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
