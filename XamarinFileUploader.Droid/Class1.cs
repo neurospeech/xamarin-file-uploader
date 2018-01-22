@@ -56,13 +56,13 @@ namespace XamarinFileUploader
             this.SetIntentRedelivery(true);
         }
 
-        private bool isRunning = false;
+        private static bool isRunning = false;
        
 
         protected override void OnHandleIntent(Intent intent)
         {
 
-            lock (this) {
+            lock (typeof(BackgroundUploadService)) {
                 if (isRunning)
                     return;
                 isRunning = true;
@@ -135,7 +135,7 @@ namespace XamarinFileUploader
             }
 
 
-            lock (this) {
+            lock (typeof(BackgroundUploadService)) {
                 isRunning = false;
             }
 
