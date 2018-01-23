@@ -154,6 +154,10 @@ namespace XamarinFileUploader
                 var body = new StreamContent(input);
                 body.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse(pending.ContentType);
 
+                var fileInfo = new System.IO.FileInfo(pending.FilePath);
+
+                body.Headers.ContentLength = fileInfo.Length;
+
                 if (pending.Headers != null) {
                     foreach (var h in pending.Headers)
                     {
