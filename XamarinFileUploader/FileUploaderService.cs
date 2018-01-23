@@ -77,6 +77,9 @@ namespace XamarinFileUploader
 
 
         public async Task ReportPendingStatus() {
+
+            SaveState();
+
             var pending = Requests
                 .Where(x => x.ResponseCode != 0 && x.Processed == false)
                 .ToList();
