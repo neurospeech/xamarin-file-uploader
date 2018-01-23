@@ -175,6 +175,8 @@ namespace XamarinFileUploader
                     }
                 });
 
+                System.Diagnostics.Debug.WriteLine($"Starting upload for {pending.Identifier}");
+
                 using (var response = await client.SendAsync(msg, HttpCompletionOption.ResponseHeadersRead)) {
                     using (var s = await response.Content.ReadAsStreamAsync()) {
 
@@ -189,7 +191,7 @@ namespace XamarinFileUploader
                     }
                 }
 
-
+                System.Diagnostics.Debug.WriteLine($"Finished upload for {pending.Identifier}");
             }
 
             await FileUploaderService.Instance.ReportPendingStatus();
