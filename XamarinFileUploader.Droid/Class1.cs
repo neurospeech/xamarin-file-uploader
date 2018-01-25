@@ -21,14 +21,14 @@ namespace XamarinFileUploader
         protected virtual string ReadPreferences()
         {
             return Context
-                .GetSharedPreferences("files", Android.Content.FileCreationMode.Private)
+                .GetSharedPreferences(StorageKey, Android.Content.FileCreationMode.Private)
                 .GetString("files", null);
         }
 
         protected virtual void WritePreferences(string content)
         {
             Context
-                .GetSharedPreferences("files", Android.Content.FileCreationMode.Private)
+                .GetSharedPreferences(StorageKey, Android.Content.FileCreationMode.Private)
                 .Edit()
                 .PutString("files", content)
                 .Commit();
