@@ -92,7 +92,7 @@ namespace XamarinFileUploader
 
         }
 
-        public string StorageKey { get; set; } = "files2";
+        public string StorageKey { get; set; } = "files3";
 
         protected virtual Task QueueRequest(FileUploadRequest request)
         {

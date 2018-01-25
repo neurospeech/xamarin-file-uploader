@@ -37,7 +37,7 @@ namespace XamarinFileUploader
 
             while (true) {
 
-                var pending = FileUploaderService.Instance.Storage.Get().Take(4).ToList();
+                var pending = FileUploaderService.Instance.Storage.Get().Where(x => x.ResponseCode == 0).Take(4).ToList();
                 if (!pending.Any())
                 {
                     FileUploaderService.Instance.ReportPendingStatus().Wait();
