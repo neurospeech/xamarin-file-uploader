@@ -11,7 +11,7 @@ namespace XamarinFileUploader
     public partial class PrefStorage : IFileUploadStorage
     {
 
-        public string StorageKey { get; set; };
+        public string StorageKey { get; set; }
 
         List<FileUploadRequest> requests = new List<FileUploadRequest>();
 
