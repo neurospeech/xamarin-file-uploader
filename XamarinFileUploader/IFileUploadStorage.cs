@@ -14,6 +14,8 @@ namespace XamarinFileUploader
         void Add(FileUploadRequest request);
 
         bool Remove(FileUploadRequest request);
+
+        string StorageKey { get; set; }
              
 
     }

@@ -27,6 +27,8 @@ namespace XamarinFileUploader
 
             Storage = Receiver.GetStorage() ?? new PrefStorage();
 
+            Storage.StorageKey = StorageKey;
+
             Xamarin.Forms.Device.BeginInvokeOnMainThread(async () => {
                 try {
 
@@ -90,7 +92,7 @@ namespace XamarinFileUploader
 
         }
 
-        public string StorageKey { get; set; } = "files1";
+        public string StorageKey { get; set; } = "files2";
 
         protected virtual Task QueueRequest(FileUploadRequest request)
         {
