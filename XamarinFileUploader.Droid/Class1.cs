@@ -51,6 +51,9 @@ namespace XamarinFileUploader
     [Service]
     public class BackgroundUploadService : IntentService
     {
+
+        private static object lockObject = new object();
+
         public BackgroundUploadService()
         {
             this.SetIntentRedelivery(true);
@@ -62,7 +65,7 @@ namespace XamarinFileUploader
         protected override void OnHandleIntent(Intent intent)
         {
 
-            lock (typeof(BackgroundUploadService)) {
+            lock (lockObject) {
                 if (isRunning)
                     return;
                 isRunning = true;
@@ -138,7 +141,7 @@ namespace XamarinFileUploader
             }
 
 
-            lock (typeof(BackgroundUploadService)) {
+            lock (lockObject) {
                 isRunning = false;
             }
 
