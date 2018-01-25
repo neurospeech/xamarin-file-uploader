@@ -1,51 +1,13 @@
 ﻿using Android.App;
 using Android.Content;
 using System;
-using System.IO;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace XamarinFileUploader
 {
-    public partial class FileUploaderService
-    {
-
-        private void OnStarted() {
-            Intent intent = new Intent(Context, typeof(BackgroundUploadService));
-            Context.StartService(intent);
-        }
-
-        protected virtual string ReadPreferences()
-        {
-            return Context
-                .GetSharedPreferences(StorageKey, Android.Content.FileCreationMode.Private)
-                .GetString("files", null);
-        }
-
-        protected virtual void WritePreferences(string content)
-        {
-            Context
-                .GetSharedPreferences(StorageKey, Android.Content.FileCreationMode.Private)
-                .Edit()
-                .PutString("files", content)
-                .Commit();
-        }
-
-        public Context Context =>
-            Xamarin.Forms.Forms.Context;
-
-        private void StartUploadInternal(FileUploadRequest request)
-        {
-            
-            Intent intent = new Intent(Context, typeof(BackgroundUploadService));
-            Context.StartService(intent);
-        }
-
-
-    }
 
 
     [Service]
@@ -74,7 +36,7 @@ namespace XamarinFileUploader
 
             while (true) {
                 
-                var pending = FileUploaderService.Instance.Requests.FirstOrDefault(x => x.ResponseCode == 0);
+                var pending = FileUploaderService.Instance.Storage.Get().FirstOrDefault(x => x.ResponseCode == 0);
                 if (pending == null)
                 {
                     FileUploaderService.Instance.ReportPendingStatus().Wait();
@@ -199,91 +161,6 @@ namespace XamarinFileUploader
 
             await FileUploaderService.Instance.ReportPendingStatus();
 
-        }
-
-    }
-
-    internal class ProgressableStreamContent : HttpContent
-    {
-
-        /// <summary>
-        /// Lets keep buffer of 20kb
-        /// </summary>
-        private const int defaultBufferSize = 5 * 4096;
-
-        private HttpContent content;
-        private int bufferSize;
-        //private bool contentConsumed;
-        private Action<long, long> progress;
-
-        public ProgressableStreamContent(HttpContent content, Action<long, long> progress) : this(content, defaultBufferSize, progress) { }
-
-        public ProgressableStreamContent(HttpContent content, int bufferSize, Action<long, long> progress)
-        {
-            if (content == null)
-            {
-                throw new ArgumentNullException("content");
-            }
-            if (bufferSize <= 0)
-            {
-                throw new ArgumentOutOfRangeException("bufferSize");
-            }
-
-            this.content = content;
-            this.bufferSize = bufferSize;
-            this.progress = progress;
-
-            foreach (var h in content.Headers)
-            {
-                this.Headers.Add(h.Key, h.Value);
-            }
-        }
-
-        protected override Task SerializeToStreamAsync(Stream stream, TransportContext context)
-        {
-
-            return Task.Run(async () =>
-            {
-                var buffer = new Byte[this.bufferSize];
-                long size;
-                TryComputeLength(out size);
-                var uploaded = 0;
-
-
-                using (var sinput = await content.ReadAsStreamAsync())
-                {
-                    while (true)
-                    {
-                        var length = sinput.Read(buffer, 0, buffer.Length);
-                        if (length <= 0) break;
-
-                        //downloader.Uploaded = uploaded += length;
-                        uploaded += length;
-                        progress?.Invoke(uploaded, size);
-
-                        //System.Diagnostics.Debug.WriteLine($"Bytes sent {uploaded} of {size}");
-
-                        stream.Write(buffer, 0, length);
-                        stream.Flush();
-                    }
-                }
-                stream.Flush();
-            });
-        }
-
-        protected override bool TryComputeLength(out long length)
-        {
-            length = content.Headers.ContentLength.GetValueOrDefault();
-            return true;
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                content.Dispose();
-            }
-            base.Dispose(disposing);
         }
 
     }

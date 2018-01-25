@@ -9,6 +9,13 @@
     <Import_RootNamespace>XamarinFileUploader</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)ExceptionArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)FileUploaderService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)FileUploadRequest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)FileUploadRequestArgs.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Header.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IFileUploadReceiver.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IFileUploadStorage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PrefStorage.cs" />
   </ItemGroup>
 </Project>

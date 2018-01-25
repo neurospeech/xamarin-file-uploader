@@ -58,7 +58,9 @@
     <Folder Include="Resources\" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="FileUploaderHandler.cs" />
+    <Compile Include="FileUploaderService.cs" />
+    <Compile Include="PrefStorage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

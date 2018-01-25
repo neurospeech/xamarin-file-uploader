@@ -89,7 +89,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="BackgroundUploadService.cs" />
+    <Compile Include="FileUploaderService.cs" />
+    <Compile Include="PrefStorage.cs" />
+    <Compile Include="ProgressableStreamContent.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

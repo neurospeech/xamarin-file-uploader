@@ -12,25 +12,12 @@ using XamarinFileUploader;
 namespace XamarinFileUploader
 {
 
-    public interface IFileUploadReceiver {
-
-
-        Task<bool> CompletedAsync(FileUploadRequest request);
-
-        Task<bool> FailedAsync(FileUploadRequest request);
-
-        void OnProgress(FileUploadRequest request);
-
-        void FatalError(Exception ex);
-
-        HttpClient GetHttpClient();
-
-    }
-
     public partial class FileUploaderService
     {
 
         public IFileUploadReceiver Receiver { get; set; }
+
+        public IFileUploadStorage Storage { get; set; }
 
 
         public FileUploaderService()
@@ -38,23 +25,12 @@ namespace XamarinFileUploader
 
             Receiver = Xamarin.Forms.DependencyService.Get<IFileUploadReceiver>();
 
+            Storage = Receiver.GetStorage() ?? new PrefStorage();
+
             Xamarin.Forms.Device.BeginInvokeOnMainThread(async () => {
                 try {
 
                     await Task.Delay(1000);
-                    lock (this)
-                    {
-                        string existing = ReadPreferences();
-
-                        List<FileUploadRequest> requests = Requests;
-
-                        requests.Clear();
-
-                        if (!string.IsNullOrWhiteSpace(existing))
-                        {
-                            requests.AddRange(JsonConvert.DeserializeObject<List<FileUploadRequest>>(existing));
-                        }
-                    }
 
                     OnStarted();
 
@@ -72,15 +48,13 @@ namespace XamarinFileUploader
             _Instance ?? (_Instance = Xamarin.Forms.DependencyService.Get<FileUploaderService>());
 
 
-        public List<FileUploadRequest> Requests { get; }
-            = new List<FileUploadRequest>();
-
 
         public async Task ReportPendingStatus() {
 
             SaveState();
 
-            var pending = Requests
+            var pending = Storage
+                .Get()
                 .Where(x => x.ResponseCode != 0 && x.Processed == false)
                 .ToList();
             foreach (var r in pending)
@@ -121,29 +95,7 @@ namespace XamarinFileUploader
         protected virtual Task QueueRequest(FileUploadRequest request)
         {
 
-            lock (this)
-            {
-
-                // request.Identifier = Guid.NewGuid().ToString();
-
-                string existing = ReadPreferences();
-
-                List<FileUploadRequest> requests = Requests;
-
-                requests.Clear();
-
-                if (!string.IsNullOrWhiteSpace(existing))
-                {
-                    requests.AddRange(JsonConvert.DeserializeObject<List<FileUploadRequest>>(existing));
-                }
-
-                requests.Add(request);
-
-                existing = JsonConvert.SerializeObject(requests);
-
-                WritePreferences(existing);
-
-            }
+            Storage.Add(request);
 
             StartUploadInternal(request);
 
@@ -155,10 +107,7 @@ namespace XamarinFileUploader
 
 
         protected void SaveState() {
-            lock (this) {
-                var existing = JsonConvert.SerializeObject(Requests);
-                WritePreferences(existing);
-            }
+            Storage.Save();
         }
 
 
@@ -202,7 +151,7 @@ namespace XamarinFileUploader
                     if (r.Processed)
                     {
                         // delete file...
-                        Requests.Remove(r);
+                        Storage.Remove(r);
                         SaveState();
                     }
                 }
@@ -235,108 +184,4 @@ namespace XamarinFileUploader
     }
 
     public delegate Task<bool> FileStatusUpdate(object sender, FileUploadRequest request);
-
-    public class ExceptionArgs : EventArgs
-    {
-        public Exception Exception { get; }
-
-        public ExceptionArgs(Exception ex)
-        {
-            this.Exception = ex;
-        }
-    }
-
-    public class FileUploadRequestArgs : EventArgs {
-        public FileUploadRequestArgs(FileUploadRequest request)
-        {
-            this.Request = request;
-        }
-
-        public FileUploadRequest Request { get; }
-    }
-
-    public class FileUploadRequest {
-
-        internal bool IsNotifying = false;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public string Identifier { get; set; }
-
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public string Method { get; set; }
-
-        public Header[] Headers { get; set; }
-
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public string ContentType { get; set; }
-
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public string FilePath { get; set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public string Url { get; set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public int TotalBytes { get; set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public int TotalSent { get; set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public int ResponseCode { get; set; }
-
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public string ResponseContentType { get; set; }
-
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public string ResponseFilePath { get; set; }
-
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public bool Processed { get; set; }
-    }
-
-    public class Header {
-
-        public Header()
-        {
-
-        }
-
-        public Header(string key, string v)
-        {
-            this.Key = key;
-            this.Value = v;
-        }
-
-        public string Key { get; set; }
-        public string Value { get; set; }
-    }
 }
