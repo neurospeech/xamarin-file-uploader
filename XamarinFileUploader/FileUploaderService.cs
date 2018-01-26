@@ -128,12 +128,12 @@ namespace XamarinFileUploader
                 try
                 {
 
-                    lock (r)
-                    {
-                        if (r.IsNotifying)
-                            return;
-                        r.IsNotifying = true;
-                    }
+                    //lock (r)
+                    //{
+                    //    if (r.IsNotifying)
+                    //        return;
+                    //    r.IsNotifying = true;
+                    //}
 
                     if (r.ResponseCode == 200)
                     {
@@ -161,13 +161,13 @@ namespace XamarinFileUploader
                 {
                     ReportFatalError(ex);
                 }
-                finally
-                {
-                    lock (r)
-                    {
-                        r.IsNotifying = false;
-                    }
-                }
+                //finally
+                //{
+                //    lock (r)
+                //    {
+                //        r.IsNotifying = false;
+                //    }
+                //}
 
             });
 
