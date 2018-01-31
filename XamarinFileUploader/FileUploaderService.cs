@@ -65,6 +65,17 @@ namespace XamarinFileUploader
             }
         }
 
+        public void CancelUpload(string key) {
+            var r = Storage.Get().Where(x => x.Identifier == key).FirstOrDefault();
+            if (r == null)
+                return;
+
+            r.Cancelled = true;
+            SaveState();
+
+            OnCancel(r);
+        }
+
         public async Task StartUpload(string tag, string url, string method, HttpContent content) {
 
             FileUploadRequest request = new FileUploadRequest() {

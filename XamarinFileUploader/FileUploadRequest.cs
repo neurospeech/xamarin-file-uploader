@@ -70,5 +70,10 @@ namespace XamarinFileUploader
         /// 
         /// </summary>
         public bool Processed { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool Cancelled { get; set; }
     }
 }

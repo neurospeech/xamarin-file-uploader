@@ -1,4 +1,5 @@
 ﻿using Foundation;
+using System;
 using System.Collections.Generic;
 
 namespace XamarinFileUploader
@@ -21,6 +22,20 @@ namespace XamarinFileUploader
                 await System.Threading.Tasks.Task.Delay(1000);
                 await FileUploaderService.Instance.ReportPendingStatus();
             });
+        }
+
+        private void OnCancel(FileUploadRequest r)
+        {
+            var configuration = NSUrlSessionConfiguration.CreateBackgroundSessionConfiguration(r.Identifier);
+
+            // max timeout is one hour...
+
+            configuration.TimeoutIntervalForResource = 60 * 60;
+
+            NSUrlSession session = NSUrlSession.FromConfiguration(configuration, (INSUrlSessionDelegate)this, NSOperationQueue.MainQueue);
+
+            // cancel pending...
+            throw new NotImplementedException();
         }
 
 

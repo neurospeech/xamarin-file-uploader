@@ -22,6 +22,9 @@ namespace XamarinFileUploader
             Context.StartService(intent);
         }
 
+        private void OnCancel(FileUploadRequest request) {
+            BackgroundUploadService.CancellationTokenSource?.Cancel(false);
+        }
 
     }
 
