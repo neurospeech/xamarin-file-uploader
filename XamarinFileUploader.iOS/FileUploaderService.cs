@@ -14,6 +14,27 @@ namespace XamarinFileUploader
         public IEnumerable<FileUploadRequest> Requests =>
             Storage.Get();
 
+
+        public NSUrlSession GetSession(string identifier) {
+
+            var configuration = NSUrlSessionConfiguration.CreateBackgroundSessionConfiguration(identifier);
+
+            // max timeout is one hour...
+
+            configuration.TimeoutIntervalForResource = 60 * 60;
+
+            return NSUrlSession.FromConfiguration(configuration, (INSUrlSessionDelegate)Delegate, NSOperationQueue.MainQueue);
+        }
+
+
+        public void HandleEventsForBackground(string sessionIdentifier, Action completionHandler)
+        {
+            Delegate.CompletionHandler = completionHandler;
+
+            GetSession(sessionIdentifier);
+        }
+
+
         private void OnStarted()
         {
 
@@ -26,29 +47,14 @@ namespace XamarinFileUploader
 
         private void OnCancel(FileUploadRequest r)
         {
-            var configuration = NSUrlSessionConfiguration.CreateBackgroundSessionConfiguration(r.Identifier);
-
-            // max timeout is one hour...
-
-            configuration.TimeoutIntervalForResource = 60 * 60;
-
-            NSUrlSession session = NSUrlSession.FromConfiguration(configuration, (INSUrlSessionDelegate)this, NSOperationQueue.MainQueue);
-
-            // cancel pending...
-            throw new NotImplementedException();
+            GetSession(r.Identifier).InvalidateAndCancel();
         }
 
 
 
         private void StartUploadInternal(FileUploadRequest r)
         {
-            var configuration = NSUrlSessionConfiguration.CreateBackgroundSessionConfiguration(r.Identifier);
-
-            // max timeout is one hour...
-
-            configuration.TimeoutIntervalForResource = 60 * 60;
-
-            NSUrlSession session = NSUrlSession.FromConfiguration(configuration, (INSUrlSessionDelegate)this, NSOperationQueue.MainQueue);
+            var session = GetSession(r.Identifier);
 
             var request = new NSMutableUrlRequest(NSUrl.FromString(r.Url));
             request.HttpMethod = r.Method;

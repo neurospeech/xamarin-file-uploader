@@ -12,7 +12,6 @@ namespace XamarinFileUploader
 
         public Action CompletionHandler { get; set; }
 
-
         public override void DidBecomeInvalid(NSUrlSession session, NSError error)
         {
             Update(session.Configuration.Identifier, error);
