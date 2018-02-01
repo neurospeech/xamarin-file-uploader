@@ -57,6 +57,10 @@ namespace XamarinFileUploader
                 r.ResponseCode = 200;
             }
 
+            if (System.IO.File.Exists(r.FilePath)) {
+                System.IO.File.Delete(r.FilePath);
+            }
+
             System.Threading.Tasks.Task.Run(async () => {
                 await FileUploaderService.Instance.ReportPendingStatus();
                 CompletionHandler?.Invoke();
