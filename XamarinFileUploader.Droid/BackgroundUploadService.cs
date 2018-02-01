@@ -95,6 +95,9 @@ namespace XamarinFileUploader
                 if (pending.Cancelled)
                 {
                     pending.ResponseCode = 555;
+                    if (System.IO.File.Exists(pending.FilePath)) {
+                        System.IO.File.Delete(pending.FilePath);
+                    }
                     return;
                 }
 

@@ -165,6 +165,14 @@ namespace XamarinFileUploader
                     {
                         // delete file...
                         Storage.Remove(r);
+                        if (System.IO.File.Exists(r.FilePath))
+                        {
+                            System.IO.File.Delete(r.FilePath);
+                        }
+                        if (r.ResponseFilePath != null && System.IO.File.Exists(r.ResponseFilePath))
+                        {
+                            System.IO.File.Delete(r.ResponseFilePath);
+                        }
                         SaveState();
                     }
                 }
