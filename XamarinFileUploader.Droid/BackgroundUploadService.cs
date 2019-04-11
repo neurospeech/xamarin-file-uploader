@@ -101,6 +101,13 @@ namespace XamarinFileUploader
                     return;
                 }
 
+                if (!System.IO.File.Exists(pending.FilePath))
+                {
+                    pending.ResponseCode = 555;
+                    pending.Cancelled = true;
+                    return;
+                }
+
                 try
                 {
 
@@ -109,6 +116,7 @@ namespace XamarinFileUploader
                     {
                         if (pending.Cancelled)
                         {
+                            pending.ResponseCode = 555;
                             fileCancelSource.Cancel();
                         }
                     });
@@ -182,6 +190,8 @@ namespace XamarinFileUploader
 
             await Task.WhenAll(tasks);
 
+            // also save last status...
+            FileUploaderService.Instance.Storage.Save();
             await FileUploaderService.Instance.ReportPendingStatus();
 
         }
