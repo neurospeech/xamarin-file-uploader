@@ -23,7 +23,7 @@ namespace XamarinFileUploader
 
 
         public Context Context =>
-            Xamarin.Forms.Forms.Context;
+            Android.App.Application.Context;
 
     }
 
