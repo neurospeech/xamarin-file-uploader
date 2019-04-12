@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -74,6 +75,35 @@ namespace XamarinFileUploader
             SaveState();
 
             OnCancel(r);
+        }
+
+        public void DeleteRequest(string tag)
+        {
+            var req = this.Storage.Get().FirstOrDefault(x => x.Identifier == tag);
+            if (req == null) {
+                return;
+            }
+            try
+            {
+                if (!string.IsNullOrWhiteSpace(req.ResponseFilePath) && File.Exists(req.ResponseFilePath))
+                {
+                    File.Delete(req.ResponseFilePath);
+                }
+            } catch 
+            {
+
+            }
+
+            try
+            {
+                if (File.Exists(req.FilePath))
+                {
+                    File.Delete(req.FilePath);
+                }
+            } catch { }
+
+            this.Storage.Remove(req);
+            this.Storage.Save();
         }
 
         public async Task StartUpload(string tag, string url, string method, HttpContent content) {
