@@ -5,7 +5,7 @@ namespace XamarinFileUploader
     public partial class FileUploaderService
     {
         public Context Context =>
-            Xamarin.Forms.Forms.Context;
+            Android.App.Application.Context;
 
         private void OnStarted() {
             Intent intent = new Intent(Context, typeof(BackgroundUploadService));
