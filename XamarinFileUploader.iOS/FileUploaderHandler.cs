@@ -38,6 +38,10 @@ namespace XamarinFileUploader
             var urlKey = identifier;
 
             var r = FileUploaderService.Instance.Requests.FirstOrDefault(x => x.Identifier == identifier);
+            if (r == null)
+            {
+                return;
+            }
             if (error != null)
             {
                 r.ResponseCode = 500;
@@ -72,7 +76,8 @@ namespace XamarinFileUploader
             string key = session.Configuration.Identifier;
 
             var r = FileUploaderService.Instance.Requests.FirstOrDefault(x => x.Identifier == session.Configuration.Identifier);
-
+            if (r == null)
+                return;
             var bytes = data.ToArray();
             using (var s = System.IO.File.OpenWrite(r.ResponseFilePath))
             {
@@ -86,6 +91,10 @@ namespace XamarinFileUploader
             string urlKey = session.Configuration.Identifier;
 
             var r = FileUploaderService.Instance.Requests.FirstOrDefault(x => x.Identifier == session.Configuration.Identifier);
+            if (r == null)
+            {
+                return;
+            }
             r.TotalBytes = (int)totalBytesExpectedToSend;
             r.TotalSent = (int)totalBytesSent;
 
