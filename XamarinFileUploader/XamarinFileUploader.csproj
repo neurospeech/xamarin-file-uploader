@@ -24,6 +24,9 @@
     <Compile Remove="Resources\Resource.Designer.cs" />
     <Compile Remove="Platforms\**\*.cs" />
   </ItemGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
+    <Compile Include="Platforms\Standard\**\*.cs" />
+  </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'Xamarin.iOS10' ">
     <Reference Include="System" />
     <Reference Include="System.Runtime" />
@@ -61,4 +64,5 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="Xamarin.CommunityToolkit" Version="1.2.0" />
     <PackageReference Include="Xamarin.Essentials" Version="1.7.0" />
-  </ItemGroup></Project>
+  </ItemGroup>
+</Project>
