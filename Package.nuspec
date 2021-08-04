@@ -32,8 +32,8 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="XamarinFileUploader\bin\Debug\monoandroid10.0\XamarinFileUploader.*" target="lib\Xamarin.iOS10" />
-    <file src="XamarinFileUploader\bin\Debug\xamarin.ios10\XamarinFileUploader.*" target="lib\MonoAndroid10" />
+    <file src="XamarinFileUploader\bin\Debug\xamarin.ios10\XamarinFileUploader.*" target="lib\Xamarin.iOS10" />
+    <file src="XamarinFileUploader\bin\Debug\monoandroid10.0\XamarinFileUploader.*" target="lib\MonoAndroid10" />
     <file src="XamarinFileUploader\bin\Debug\netstandard2.0\XamarinFileUploader.*" target="lib\netstandard2.0" />
   </files>
 </package>
