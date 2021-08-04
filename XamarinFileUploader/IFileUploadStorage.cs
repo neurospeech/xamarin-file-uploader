@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using XamarinFileUploader;
 
-[assembly: Xamarin.Forms.Dependency(typeof(FileUploaderService))]
-
 namespace XamarinFileUploader
 {
     public interface IFileUploadStorage {

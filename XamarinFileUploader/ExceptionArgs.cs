@@ -1,8 +1,6 @@
 ﻿using System;
 using XamarinFileUploader;
 
-[assembly: Xamarin.Forms.Dependency(typeof(FileUploaderService))]
-
 namespace XamarinFileUploader
 {
     public class ExceptionArgs : EventArgs

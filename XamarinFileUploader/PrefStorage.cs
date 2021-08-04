@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using XamarinFileUploader;
 
-[assembly: Xamarin.Forms.Dependency(typeof(FileUploaderService))]
-
 namespace XamarinFileUploader
 {
     public partial class PrefStorage : IFileUploadStorage
@@ -13,7 +11,7 @@ namespace XamarinFileUploader
 
         public string StorageKey { get; set; }
 
-        List<FileUploadRequest> requests = new List<FileUploadRequest>();
+        public List<FileUploadRequest> requests = new List<FileUploadRequest>();
 
         public PrefStorage()
         {
@@ -22,7 +20,7 @@ namespace XamarinFileUploader
 
         private void Read()
         {
-            string existing = ReadPreferences();
+            string existing = Xamarin.Essentials.Preferences.Get("xfu", null);
 
             lock (this)
             {
@@ -95,7 +93,7 @@ namespace XamarinFileUploader
 
         private void SaveInternal()
         {
-            WritePreferences(JsonConvert.SerializeObject(requests));
+            Xamarin.Essentials.Preferences.Set("xfu", JsonConvert.SerializeObject(requests));
         }
 
         public void Save()

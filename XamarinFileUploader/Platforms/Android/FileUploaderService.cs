@@ -1,28 +1,31 @@
 ﻿using Android.Content;
+using XamarinFileUploader;
+
+[assembly: Xamarin.Forms.Dependency(typeof(FileUploaderServiceImpl))]
 
 namespace XamarinFileUploader
 {
-    public partial class FileUploaderService
+    public class FileUploaderServiceImpl: FileUploaderService
     {
         public Context Context =>
             Android.App.Application.Context;
 
-        private void OnStarted() {
+        protected override void OnStarted() {
             Intent intent = new Intent(Context, typeof(BackgroundUploadService));
             Context.StartService(intent);
         }
 
-        
 
 
-        private void StartUploadInternal(FileUploadRequest request)
+
+        protected override void StartUploadInternal(FileUploadRequest request)
         {
             
             Intent intent = new Intent(Context, typeof(BackgroundUploadService));
             Context.StartService(intent);
         }
 
-        private void OnCancel(FileUploadRequest request) {
+        protected override void OnCancel(FileUploadRequest request) {
             BackgroundUploadService.CancellationTokenSource?.Cancel(false);
         }
 

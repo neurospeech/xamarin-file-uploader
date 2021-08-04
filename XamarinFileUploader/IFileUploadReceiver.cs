@@ -3,8 +3,6 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using XamarinFileUploader;
 
-[assembly: Xamarin.Forms.Dependency(typeof(FileUploaderService))]
-
 namespace XamarinFileUploader
 {
     public interface IFileUploadReceiver {

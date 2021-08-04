@@ -8,13 +8,15 @@ using System.Text;
 using System.Threading.Tasks;
 using XamarinFileUploader;
 
-[assembly: Xamarin.Forms.Dependency(typeof(FileUploaderService))]
-
 namespace XamarinFileUploader
 {
 
-    public partial class FileUploaderService
+    public abstract class FileUploaderService
     {
+
+
+        public IEnumerable<FileUploadRequest> Requests =>
+            Storage.Get();
 
         public IFileUploadReceiver Receiver { get; set; }
 
@@ -46,6 +48,8 @@ namespace XamarinFileUploader
             
         }
 
+        protected abstract void OnStarted();
+
         private static FileUploaderService _Instance = null;
         public static FileUploaderService Instance =>
             _Instance ?? (_Instance = Xamarin.Forms.DependencyService.Get<FileUploaderService>());
@@ -76,6 +80,8 @@ namespace XamarinFileUploader
 
             OnCancel(r);
         }
+
+        protected abstract void OnCancel(FileUploadRequest r);
 
         public void DeleteRequest(string tag)
         {
@@ -148,6 +154,7 @@ namespace XamarinFileUploader
 
         }
 
+        protected abstract void StartUploadInternal(FileUploadRequest request);
 
         protected void SaveState() {
             Storage.Save();

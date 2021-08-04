@@ -1,19 +1,18 @@
 ﻿using Foundation;
 using System;
 using System.Collections.Generic;
+using XamarinFileUploader;
+
+[assembly: Xamarin.Forms.Dependency(typeof(FileUploaderServiceImpl))]
 
 namespace XamarinFileUploader
 {
-    public partial class FileUploaderService
+    public class FileUploaderServiceImpl: FileUploaderService
     {
 
         private FileUploaderHandler _handler;
         public FileUploaderHandler Delegate =>
             (_handler ?? (_handler = new FileUploaderHandler()));
-
-        public IEnumerable<FileUploadRequest> Requests =>
-            Storage.Get();
-
 
         public NSUrlSession GetSession(string identifier) {
 
@@ -35,7 +34,7 @@ namespace XamarinFileUploader
         }
 
 
-        private void OnStarted()
+        protected override void OnStarted()
         {
 
             System.Threading.Tasks.Task.Run(async () =>
@@ -45,14 +44,14 @@ namespace XamarinFileUploader
             });
         }
 
-        private void OnCancel(FileUploadRequest r)
+        protected override void OnCancel(FileUploadRequest r)
         {
             GetSession(r.Identifier).InvalidateAndCancel();
         }
 
 
 
-        private void StartUploadInternal(FileUploadRequest r)
+        protected override void StartUploadInternal(FileUploadRequest r)
         {
             var session = GetSession(r.Identifier);
 
