@@ -14,7 +14,6 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(TargetFramework)' == 'monoandroid10.0'">
     <TargetFrameworkIdentifier>MonoAndroid</TargetFrameworkIdentifier>
-    <TargetFrameworkVersion>v11.0</TargetFrameworkVersion>
     <AndroidUseLatestPlatformSdk>False</AndroidUseLatestPlatformSdk>
     <DebugType>full</DebugType>
     <DefineConstants>$(DefineConstants);__DROID__;</DefineConstants>
